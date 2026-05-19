@@ -1,0 +1,69 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: finaldb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d finaldb"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      redis:
+        condition: service_started
+    environment:
+      DATABASE_URL: postgresql://admin:secret@db:5432/finaldb
+      RABBITMQ_HOST: rabbitmq
+      REDIS_HOST: redis
+    volumes:
+      - ./templates:/app/templates
+      - ./uploads:/app/uploads   # yüklenen dosyalar için
+
+  worker:
+    build: .
+    command: python worker.py
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+      redis:
+        condition: service_started
+    environment:
+      DATABASE_URL: postgresql://admin:secret@db:5432/finaldb
+      RABBITMQ_HOST: rabbitmq
+      REDIS_HOST: redis
+    volumes:
+      - ./uploads:/app/uploads
+
+volumes:
+  postgres_data:

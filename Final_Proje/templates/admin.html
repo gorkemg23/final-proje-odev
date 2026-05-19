@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ group }} Paneli</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-8">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">{{ group | upper }} Yönetim Paneli</h1>
+            <a href="/" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Ana Sayfa</a>
+        </div>
+
+        <!-- Yeni kayıt formu -->
+        <div class="bg-white p-4 rounded-lg shadow-md mb-8">
+            <h2 class="text-xl font-semibold mb-2">Yeni Kayıt Ekle</h2>
+            <form action="/save/{{ group }}" method="post">
+                <textarea name="content" rows="3" class="w-full border p-2 rounded mb-2" placeholder="İçerik giriniz..."></textarea>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Kaydet</button>
+            </form>
+        </div>
+
+        <!-- Kayıt listesi -->
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold mb-4">Kayıtlar</h2>
+            <ul class="space-y-4">
+                {% for record in records %}
+                <li class="border-b pb-2">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <p class="text-gray-700"><strong>ID:</strong> {{ record.id }}</p>
+                            <p class="text-gray-700"><strong>İçerik:</strong> {{ record.data.content }}</p>
+                            <p class="text-gray-500 text-sm">{{ record.created_at }}</p>
+                        </div>
+                        <div class="space-x-2">
+                            <!-- Güncelleme formu (inline) -->
+                            <form action="/update/{{ record.id }}" method="post" class="inline">
+                                <input type="text" name="content" value="{{ record.data.content }}" class="border p-1 rounded w-48">
+                                <button type="submit" class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Güncelle</button>
+                            </form>
+                            <a href="/delete/{{ record.id }}" onclick="return confirm('Silmek istediğinize emin misiniz?')" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Sil</a>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

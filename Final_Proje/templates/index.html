@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Proje - Ana Sayfa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-8">
+        <h1 class="text-3xl font-bold text-center text-blue-700 mb-8">Final Proje Yönetim Paneli</h1>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Öğrenci Paneli</h2>
+                <a href="/admin/ogrenci" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Git</a>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">Okul Paneli</h2>
+                <a href="/admin/okul" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Git</a>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-semibold mb-4">İşletme Paneli</h2>
+                <a href="/admin/isletme" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600">Git</a>
+            </div>
+        </div>
+        <div class="mt-8 bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold mb-2">Word Dosyası Analiz Et</h2>
+            <form action="/upload-word/" method="post" enctype="multipart/form-data">
+                <input type="file" name="file" accept=".docx,.txt,.jpg,.png,.pdf" class="border p-2 rounded w-full mb-2">
+                <button type="submit" class="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600">Yükle ve Analiz Et</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
